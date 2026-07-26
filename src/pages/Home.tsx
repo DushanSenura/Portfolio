@@ -299,8 +299,8 @@ function Home() {
           <a className="brand brand-footer" href="#home">
             <span className="brand-mark">D</span>
             <span>
-              <strong>Dushan</strong>
-              <small>Developer</small>
+              <strong>NovaCore</strong>
+              <small>Techs</small>
             </span>
           </a>
           <p>I&apos;m always open to discussing new projects, ideas, or opportunities.</p>
