@@ -300,7 +300,7 @@ function Home() {
             <span className="brand-mark">D</span>
             <span>
               <strong>NovaCore</strong>
-              <small>Techs</small>
+              <small>Tech</small>
             </span>
           </a>
           <p>I&apos;m always open to discussing new projects, ideas, or opportunities.</p>
