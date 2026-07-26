@@ -18,8 +18,8 @@ function SiteHeader() {
       <Link className="brand" to="/" aria-label="Dushan home">
         <span className="brand-mark">D</span>
         <span>
-          <strong>Dushan</strong>
-          <small>Developer</small>
+          <strong>NovaCore</strong>
+          <small>Tech</small>
         </span>
       </Link>
 
