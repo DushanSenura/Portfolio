@@ -351,7 +351,7 @@ function Home() {
         </div>
 
         <div>
-          <p className="footer-note">Designed & Built with heart by Novacore Tech</p>
+          <p className="footer-note">Designed & Built with heart by NovaCore Tech</p>
         </div>
       </footer>
     </main>
