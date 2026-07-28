@@ -16,8 +16,8 @@ const navItems = [
 function SiteHeader() {
   return (
     <header className="topbar">
-      <Link className="brand" to="/" aria-label="Dushan home">
-        <span className="brand-mark">D</span>
+      <Link className="brand" to="/" aria-label="NovaCore home">
+        <img src={novacore} alt="NovaCore Tech" className="brand-icon" />
         <span>
           <strong>NovaCore</strong>
           <small>Tech</small>
