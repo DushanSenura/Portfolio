@@ -42,6 +42,15 @@
   box-shadow: 0 12px 30px rgba(91, 134, 255, 0.3);
 }
 
+.brand-icon {
+  display: block;
+  width: 54px;
+  height: 54px;
+  flex: none;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 22px rgba(61, 166, 255, 0.28));
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;

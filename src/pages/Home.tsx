@@ -2,6 +2,7 @@ import {
   ArrowRight,
   Award,
   BadgeInfo,
+  BrainCircuit,
   BriefcaseBusiness,
   Code2,
   Database,
@@ -14,7 +15,11 @@ import {
   X,
   SquareTerminal,
 } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import heroImg from '../assets/Dushan-cutout.png'
+import navacore from '../assets/NovaCore.png'
+import { Link } from 'react-router-dom'
+import { projects } from '../data/projects'
 import './Home.css'
 
 const navItems = [
@@ -36,7 +41,12 @@ const skills = [
   {
     title: 'Backend',
     icon: ServerCog,
-    items: ['Node.js', 'Express', 'Python', 'REST APIs'],
+    items: ['Node.js', 'Express', 'REST APIs'],
+  },
+  {
+    title: 'AI / ML',
+    icon: BrainCircuit,
+    items: ['Python', 'Scikit-learn', 'NLP', 'FastAPI'],
   },
   {
     title: 'Database',
@@ -50,39 +60,8 @@ const skills = [
   },
 ]
 
-const projects = [
-  {
-    title: 'SmartDine',
-    category: 'Full Stack',
-    description:
-      'Restaurant management system with QR ordering, table booking, kitchen management, and analytics.',
-    tags: ['React', 'Node.js', 'PostgreSQL'],
-  },
-  {
-    title: 'AI Resume Screener',
-    category: 'AI / ML',
-    description:
-      'A smart screening system that ranks candidates against job requirements using NLP signals.',
-    tags: ['Python', 'Scikit-learn', 'NLP'],
-  },
-  {
-    title: 'Senior Residence System',
-    category: 'Full Stack',
-    description:
-      'Residence management platform for senior care with staff, resident, and medication records.',
-    tags: ['React', 'Node.js', 'MongoDB'],
-  },
-  {
-    title: 'Expense Tracker',
-    category: 'Mobile App',
-    description:
-      'Cross-platform expense tracking app with charts, budgets, reports, and daily reminders.',
-    tags: ['Flutter', 'Dart', 'SQLite'],
-  },
-]
-
 const stats = [
-  { value: '10+', label: 'Projects Completed', icon: Code2 },
+  { value: '3+', label: 'Projects Completed', icon: Code2 },
   { value: 'Looking for internship', label: 'Years of Experience', icon: BriefcaseBusiness },
   { value: '3.0', label: 'GPA (Out of 4)', icon: Award },
   { value: 'Always', label: 'Learning', icon: MoonStar },
@@ -95,6 +74,55 @@ const socialLinks = [
 ]
 
 function Home() {
+  const skillsGridRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const grid = skillsGridRef.current
+    if (!grid || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let isPaused = false
+    let animationFrame = 0
+    let previousTime = performance.now()
+
+    const pause = () => {
+      isPaused = true
+    }
+
+    const resume = () => {
+      isPaused = false
+    }
+
+    const moveCarousel = (time: number) => {
+      const elapsed = Math.min(time - previousTime, 40)
+      previousTime = time
+      const firstCard = grid.firstElementChild as HTMLElement | null
+      const cardWidth = firstCard?.offsetWidth ?? grid.clientWidth / 4
+      const gap = Number.parseFloat(getComputedStyle(grid).columnGap) || 16
+      const loopWidth = (cardWidth + gap) * skills.length
+
+      if (!isPaused && grid.scrollWidth > grid.clientWidth) {
+        grid.scrollLeft += elapsed * 0.025
+        if (grid.scrollLeft >= loopWidth) grid.scrollLeft -= loopWidth
+      }
+
+      animationFrame = requestAnimationFrame(moveCarousel)
+    }
+
+    grid.addEventListener('mouseenter', pause)
+    grid.addEventListener('mouseleave', resume)
+    grid.addEventListener('focusin', pause)
+    grid.addEventListener('focusout', resume)
+    animationFrame = requestAnimationFrame(moveCarousel)
+
+    return () => {
+      cancelAnimationFrame(animationFrame)
+      grid.removeEventListener('mouseenter', pause)
+      grid.removeEventListener('mouseleave', resume)
+      grid.removeEventListener('focusin', pause)
+      grid.removeEventListener('focusout', resume)
+    }
+  }, [])
+
   return (
     <main className="home-page" id="home">
       <section className="hero-section">
@@ -170,7 +198,7 @@ function Home() {
           <dl className="details-list">
             <div>
               <dt>Name</dt>
-              <dd>Dushan</dd>
+              <dd>Dushan Senura Suddrikku Abeywardana</dd>
             </div>
             <div>
               <dt>Location</dt>
@@ -204,12 +232,20 @@ function Home() {
           <h2>Technologies I Work With</h2>
         </div>
 
-        <div className="skills-grid">
-          {skills.map((skill) => {
+        <div
+          ref={skillsGridRef}
+          className="skills-grid"
+          aria-label="Technology categories"
+        >
+          {[...skills, ...skills].map((skill, index) => {
             const Icon = skill.icon
 
             return (
-              <article key={skill.title} className="panel skill-card">
+              <article
+                key={`${skill.title}-${index}`}
+                className="panel skill-card"
+                aria-hidden={index >= skills.length}
+              >
                 <div className="card-title">
                   <Icon size={16} />
                   <h3>{skill.title}</h3>
@@ -232,29 +268,29 @@ function Home() {
           <span className="section-kicker">
             <BriefcaseBusiness size={14} /> Projects
           </span>
-          <a className="text-link" href="#contact">
+          <Link className="text-link" to="/projects">
             View All Projects <ArrowRight size={16} />
-          </a>
+          </Link>
         </div>
 
         <div className="projects-grid">
           {projects.map((project) => (
-            <article key={project.title} className="project-card">
+            <Link key={project.title} className="project-card" to={`/projects/${project.slug}`}>
               <div className="project-visual">
                 <span>{project.category}</span>
               </div>
               <div className="project-body">
                 <h3>{project.title}</h3>
-                <p>{project.description}</p>
+                <p>{project.summary}</p>
                 <div className="chip-row compact">
-                  {project.tags.map((tag) => (
+                  {project.platforms.map((tag) => (
                     <span key={tag} className="chip chip-muted">
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
@@ -297,10 +333,10 @@ function Home() {
       <footer className="footer">
         <div>
           <a className="brand brand-footer" href="#home">
-            <span className="brand-mark">D</span>
+            <img src={navacore} alt="NovaCore Tech" className="brand-icon" />
             <span>
-              <strong>Dushan</strong>
-              <small>Developer</small>
+              <strong>NovaCore</strong>
+              <small>Tech</small>
             </span>
           </a>
           <p>I&apos;m always open to discussing new projects, ideas, or opportunities.</p>
@@ -315,7 +351,7 @@ function Home() {
         </div>
 
         <div>
-          <p className="footer-note">Designed & Built with heart by Dushan</p>
+          <p className="footer-note">Designed & Built with heart by Novacore Tech</p>
         </div>
       </footer>
     </main>
