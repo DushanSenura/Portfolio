@@ -37,6 +37,19 @@
   will-change: transform;
 }
 
+.cursor-dot::after {
+  content: '';
+  position: absolute;
+  inset: 50%;
+  width: 0;
+  height: 0;
+  border: 1px solid rgba(157, 184, 255, 0.9);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .cursor-dot.is-visible {
   opacity: 1;
 }
@@ -49,13 +62,23 @@
 }
 
 .cursor-dot.is-clicking {
-  animation: fluid-click 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  background: #b19aff;
+}
+
+.cursor-dot.is-clicking::after {
+  animation: fluid-click 460ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes fluid-click {
-  45% {
-    scale: 0.55;
-    filter: brightness(1.8);
+  0% {
+    width: 8px;
+    height: 8px;
+    opacity: 0.95;
+  }
+  100% {
+    width: 54px;
+    height: 54px;
+    opacity: 0;
   }
 }
 
